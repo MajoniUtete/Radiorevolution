@@ -1,0 +1,88 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <!-- Background -->
+  <rect width="512" height="512" fill="#000000" rx="80"/>
+
+  <!-- ─── Dove / Wing shape (Zimbabwe flag colours) ─── -->
+  <!-- Green outer wing -->
+  <path d="M256 60 C200 80, 140 100, 100 150 C130 140, 170 130, 200 120 C180 145, 155 165, 145 190 C170 170, 200 155, 230 145 Z" fill="#006400"/>
+  <!-- Yellow middle wing -->
+  <path d="M256 70 C210 90, 160 115, 130 160 C155 148, 185 138, 212 130 C195 152, 172 170, 165 195 C188 175, 215 162, 240 152 Z" fill="#FFD200"/>
+  <!-- Red inner wing -->
+  <path d="M256 82 C218 100, 175 125, 155 168 C178 158, 202 148, 226 140 C210 160, 190 176, 185 200 C206 182, 228 170, 252 162 Z" fill="#CC0000"/>
+  <!-- Black accent -->
+  <path d="M256 95 C228 110, 192 132, 175 172 C196 164, 218 155, 240 148 C226 166, 208 180, 204 204 C224 188, 244 177, 264 170 Z" fill="#1a1a1a"/>
+
+  <!-- Dove head/body (green) -->
+  <ellipse cx="310" cy="115" rx="28" ry="20" fill="#006400" transform="rotate(-30 310 115)"/>
+  <circle cx="325" cy="100" r="16" fill="#006400"/>
+  <circle cx="332" cy="96" r="4" fill="#000"/>
+  <!-- Beak -->
+  <polygon points="340,92 355,88 338,98" fill="#FFD200"/>
+
+  <!-- ─── Fist (Zimbabwe colours) ─── -->
+  <!-- Fist base/palm - green -->
+  <path d="M210 230 C195 225, 185 240, 188 260 L192 310 C192 320, 200 328, 210 328 L280 328 C290 328, 298 320, 298 310 L300 265 C302 245, 290 230, 275 230 Z" fill="#006400"/>
+  <!-- Yellow stripe on fist -->
+  <path d="M220 230 L228 230 L230 328 L222 328 Z" fill="#FFD200"/>
+  <!-- Red stripe on fist -->
+  <path d="M248 230 L256 230 L258 328 L250 328 Z" fill="#CC0000"/>
+  <!-- Black stripe on fist -->
+  <path d="M270 233 L276 235 L278 328 L272 328 Z" fill="#1a1a1a"/>
+
+  <!-- Fingers (curled) -->
+  <!-- Index finger -->
+  <path d="M215 228 C212 218, 215 205, 222 202 C228 200, 233 205, 232 215 L230 230 Z" fill="#006400"/>
+  <!-- Middle finger -->
+  <path d="M232 228 C230 216, 234 202, 241 200 C247 198, 252 204, 250 215 L248 230 Z" fill="#FFD200"/>
+  <!-- Ring finger -->
+  <path d="M250 228 C248 218, 252 204, 259 203 C265 202, 268 208, 267 218 L264 230 Z" fill="#CC0000"/>
+  <!-- Pinky -->
+  <path d="M266 232 C265 224, 268 213, 274 213 C279 213, 281 219, 280 226 L278 233 Z" fill="#006400"/>
+  <!-- Thumb -->
+  <path d="M198 255 C190 250, 185 240, 188 233 C191 227, 198 226, 203 232 L210 248 Z" fill="#CC0000"/>
+
+  <!-- Knuckle highlights -->
+  <path d="M215 220 Q225 217 235 220" stroke="rgba(255,255,255,0.3)" stroke-width="2" fill="none"/>
+  <path d="M235 218 Q245 215 255 218" stroke="rgba(255,255,255,0.3)" stroke-width="2" fill="none"/>
+
+  <!-- ─── Vintage Microphone ─── -->
+  <!-- Mic body/grille (silver/white) -->
+  <ellipse cx="175" cy="225" rx="28" ry="38" fill="#e0e0e0"/>
+  <ellipse cx="175" cy="225" rx="24" ry="34" fill="#c8c8c8"/>
+  <!-- Grille lines -->
+  <line x1="153" y1="210" x2="197" y2="210" stroke="#999" stroke-width="2"/>
+  <line x1="151" y1="220" x2="199" y2="220" stroke="#999" stroke-width="2"/>
+  <line x1="151" y1="230" x2="199" y2="230" stroke="#999" stroke-width="2"/>
+  <line x1="153" y1="240" x2="197" y2="240" stroke="#999" stroke-width="2"/>
+  <line x1="158" y1="200" x2="192" y2="200" stroke="#999" stroke-width="2"/>
+  <line x1="158" y1="250" x2="192" y2="250" stroke="#999" stroke-width="2"/>
+  <!-- Mic capsule shine -->
+  <ellipse cx="168" cy="215" rx="6" ry="8" fill="rgba(255,255,255,0.4)"/>
+  <!-- Mic band (black ring) -->
+  <rect x="151" y="258" width="48" height="10" rx="3" fill="#333"/>
+  <rect x="155" y="263" width="14" height="4" rx="2" fill="#CC0000"/>
+  <rect x="172" y="263" width="6" height="4" rx="2" fill="#FFD200"/>
+  <!-- Mic handle -->
+  <rect x="169" y="268" width="12" height="25" rx="4" fill="#888"/>
+  <line x1="172" y1="272" x2="178" y2="272" stroke="#666" stroke-width="1.5"/>
+  <line x1="172" y1="277" x2="178" y2="277" stroke="#666" stroke-width="1.5"/>
+  <line x1="172" y1="282" x2="178" y2="282" stroke="#666" stroke-width="1.5"/>
+  <!-- Mic base connector held in fist -->
+  <rect x="171" y="290" width="8" height="15" rx="3" fill="#555"/>
+
+  <!-- ─── Text ─── -->
+  <text x="256" y="370" font-family="Arial Black, Impact, sans-serif" font-size="52" font-weight="900" fill="white" text-anchor="middle" letter-spacing="-1">RADIO</text>
+  <text x="256" y="430" font-family="Arial Black, Impact, sans-serif" font-size="52" font-weight="900" fill="white" text-anchor="middle" letter-spacing="-1">REVOLUTION</text>
+  <text x="256" y="460" font-family="Arial, sans-serif" font-size="16" font-weight="600" fill="#aaaaaa" text-anchor="middle" letter-spacing="2">THE UNFILTERED VOICE OF ZIMBABWE</text>
+
+  <!-- Zimbabwe flag accent line under logo -->
+  <rect x="156" y="343" width="200" height="4" rx="2" fill="url(#flagGrad)"/>
+  <defs>
+    <linearGradient id="flagGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%"   stop-color="#006400"/>
+      <stop offset="33%"  stop-color="#FFD200"/>
+      <stop offset="66%"  stop-color="#CC0000"/>
+      <stop offset="100%" stop-color="#000000"/>
+    </linearGradient>
+  </defs>
+</svg>

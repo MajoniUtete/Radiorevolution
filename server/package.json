@@ -1,0 +1,21 @@
+{
+  "name": "radio-revolution-push-server",
+  "version": "1.0.0",
+  "description": "Push notification server for Radio Revolution Zimbabwe",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js",
+    "generate-vapid": "node -e \"const webpush=require('web-push');const keys=webpush.generateVAPIDKeys();console.log('\\nVAPID_PUBLIC_KEY='+keys.publicKey+'\\nVAPID_PRIVATE_KEY='+keys.privateKey+'\\n');\""
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "web-push": "^3.6.7"
+  },
+  "license": "MIT"
+}

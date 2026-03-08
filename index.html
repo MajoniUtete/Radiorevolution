@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#cc0000" />
+  <meta name="description" content="Radio Revolution — The Unfiltered Voice of Zimbabwe. Stream live radio, get notified when we go on air." />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="RadioRev" />
+  <meta name="mobile-web-app-capable" content="yes" />
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="Radio Revolution Zimbabwe" />
+  <meta property="og:description" content="The Unfiltered Voice of Zimbabwe — Stream Live" />
+  <meta property="og:image" content="/icons/icon-512.png" />
+  <meta property="og:type" content="website" />
+
+  <!-- Apple Touch Icons -->
+  <link rel="apple-touch-icon" href="/icons/icon-192.png" />
+  <link rel="apple-touch-icon" sizes="152x152" href="/icons/icon-152.png" />
+  <link rel="apple-touch-icon" sizes="144x144" href="/icons/icon-144.png" />
+
+  <!-- PWA -->
+  <link rel="manifest" href="/manifest.json" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/icons/icon-96.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="/icons/icon-72.png" />
+
+  <link rel="stylesheet" href="/css/style.css" />
+
+  <title>Radio Revolution — The Unfiltered Voice of Zimbabwe</title>
+</head>
+<body>
+
+<!-- Animated background gradient -->
+<div class="bg-gradient" aria-hidden="true"></div>
+
+<!-- Hidden audio element -->
+<audio id="radioAudio" preload="none" crossorigin="anonymous"></audio>
+
+<!-- ─── Zimbabwe Flag Stripe ──────────────────────────────────────────────── -->
+<div class="zim-flag-bar" aria-hidden="true">
+  <span class="f-green"></span>
+  <span class="f-gold"></span>
+  <span class="f-red"></span>
+  <span class="f-black"></span>
+  <span class="f-red"></span>
+  <span class="f-gold"></span>
+  <span class="f-green"></span>
+</div>
+
+<!-- ─── Header ───────────────────────────────────────────────────────────── -->
+<header>
+  <div class="logo-area">
+    <div class="logo-icon" role="img" aria-label="Radio Revolution logo">
+      <img src="/icons/icon-96.png" alt="" width="32" height="32"
+           style="border-radius:8px;object-fit:cover;"
+           onerror="this.style.display='none';this.parentElement.textContent='📻'">
+    </div>
+    <div class="logo-text">
+      <h1>Radio Revolution</h1>
+      <p>The Unfiltered Voice of Zimbabwe</p>
+    </div>
+  </div>
+  <div class="header-actions">
+    <button class="icon-btn" id="shareBtn" aria-label="Share Radio Revolution" title="Share">
+      🔗
+    </button>
+    <a href="/admin.html" class="icon-btn" aria-label="Host Admin Panel" title="Host Panel" style="text-decoration:none;">
+      🎙️
+    </a>
+  </div>
+</header>
+
+<!-- ─── Main Content ──────────────────────────────────────────────────────── -->
+<main>
+
+  <!-- ── Live Status Badge ─────────────────────────────────────────────── -->
+  <div class="live-status" id="liveStatus" role="status" aria-live="polite">
+    <div class="live-dot" aria-hidden="true"></div>
+    <span class="live-text" id="liveText">● LOADING...</span>
+    <span class="listeners-badge" id="listenersBadge">0 listening</span>
+  </div>
+
+  <!-- ── HOME SECTION ──────────────────────────────────────────────────── -->
+  <div class="section active" data-section="home">
+
+    <!-- Player Card -->
+    <div class="player-card" role="region" aria-label="Radio Player">
+
+      <!-- Artwork -->
+      <div class="show-artwork" id="showArtwork" role="img" aria-label="Now Playing">
+        <img src="/icons/icon-192.png" alt="Radio Revolution"
+             style="width:100%;height:100%;object-fit:cover;border-radius:50%;"
+             onerror="this.style.display='none';this.parentElement.innerHTML='📻'">
+      </div>
+
+      <h2 class="show-title" id="showTitle">Radio Revolution</h2>
+      <p class="show-subtitle" id="showSubtitle">The Unfiltered Voice of Zimbabwe</p>
+
+      <!-- Radio Waveform Visualiser -->
+      <div class="wave-container" id="waveContainer" aria-hidden="true">
+        <div class="wave-bar"></div>
+        <div class="wave-bar"></div>
+        <div class="wave-bar"></div>
+        <div class="wave-bar"></div>
+        <div class="wave-bar"></div>
+        <div class="wave-bar"></div>
+        <div class="wave-bar"></div>
+        <div class="wave-bar"></div>
+        <div class="wave-bar"></div>
+        <div class="wave-bar"></div>
+      </div>
+
+      <!-- Play Button -->
+      <div class="play-btn-wrapper">
+        <button class="play-btn" id="playBtn" aria-label="Play Radio Revolution" type="button">
+          <span id="playIcon" aria-hidden="true">▶</span>
+        </button>
+        <span class="play-btn-label" id="playLabel">Tap to Listen</span>
+      </div>
+
+      <!-- Volume -->
+      <div class="volume-row">
+        <span class="vol-icon" aria-label="Volume">🔈</span>
+        <input type="range" id="volumeSlider" min="0" max="100" value="80"
+               aria-label="Volume control" role="slider" />
+        <span class="vol-pct" id="volPct" aria-live="polite">80%</span>
+      </div>
+    </div>
+
+    <!-- Now Playing Ticker -->
+    <div class="now-playing-bar" aria-live="polite" aria-label="Now playing ticker">
+      <span class="now-playing-icon" aria-hidden="true">📡</span>
+      <div class="ticker-wrapper">
+        <div class="ticker-text" id="tickerText">
+          🎙️ Radio Revolution — The Unfiltered Voice of Zimbabwe
+        </div>
+      </div>
+    </div>
+
+    <!-- Quick Stats -->
+    <div class="stats-row" role="list" aria-label="Station stats">
+      <div class="stat-card" role="listitem">
+        <div class="stat-icon" aria-hidden="true">📡</div>
+        <div class="stat-value" id="stat-freq">100.4</div>
+        <div class="stat-label">FM MHz</div>
+      </div>
+      <div class="stat-card" role="listitem">
+        <div class="stat-icon" aria-hidden="true">👂</div>
+        <div class="stat-value" id="stat-listeners">—</div>
+        <div class="stat-label">Listeners</div>
+      </div>
+      <div class="stat-card" role="listitem">
+        <div class="stat-icon" aria-hidden="true">⏱️</div>
+        <div class="stat-value" id="stat-uptime">24/7</div>
+        <div class="stat-label">Broadcast</div>
+      </div>
+    </div>
+
+    <!-- Schedule Card -->
+    <div class="card" role="region" aria-label="Show Schedule">
+      <div class="card-header">
+        <h3 class="card-title">📅 Today's Shows</h3>
+        <button class="card-action" onclick="document.querySelector('[data-nav=schedule]').click()">
+          Full Schedule →
+        </button>
+      </div>
+
+      <div class="schedule-item">
+        <span class="sched-time">06:00</span>
+        <div class="sched-dot"></div>
+        <div class="sched-info">
+          <div class="sched-show">Rise & Shine Zimbabwe</div>
+          <div class="sched-host">with Tafadzwa Moyo</div>
+        </div>
+      </div>
+      <div class="schedule-item">
+        <span class="sched-time">09:00</span>
+        <div class="sched-dot current"></div>
+        <div class="sched-info">
+          <div class="sched-show">Morning Rush</div>
+          <div class="sched-host">with Chiedza Mutasa</div>
+        </div>
+        <span class="sched-badge on-air">On Air</span>
+      </div>
+      <div class="schedule-item">
+        <span class="sched-time">12:00</span>
+        <div class="sched-dot"></div>
+        <div class="sched-info">
+          <div class="sched-show">Midday Vibes</div>
+          <div class="sched-host">with DJ Harare</div>
+        </div>
+        <span class="sched-badge next">Next</span>
+      </div>
+      <div class="schedule-item">
+        <span class="sched-time">18:00</span>
+        <div class="sched-dot"></div>
+        <div class="sched-info">
+          <div class="sched-show">Evening Drive</div>
+          <div class="sched-host">with Rumbi Nkosi</div>
+        </div>
+      </div>
+      <div class="schedule-item">
+        <span class="sched-time">21:00</span>
+        <div class="sched-dot"></div>
+        <div class="sched-info">
+          <div class="sched-show">Night Culture</div>
+          <div class="sched-host">with Blessing Dube</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Notifications Card -->
+    <div class="notify-card" role="region" aria-label="Push Notifications">
+      <h3>🔴 Never Miss a Show</h3>
+      <p>Get notified the moment your favourite hosts go live. We'll ping you when the mic is hot!</p>
+      <button class="notify-btn" id="notifyBtn" type="button">
+        🔔 Notify me when we're LIVE!
+      </button>
+    </div>
+
+  </div><!-- /section home -->
+
+  <!-- ── SCHEDULE SECTION ───────────────────────────────────────────────── -->
+  <div class="section" data-section="schedule">
+    <div class="card">
+      <div class="card-header">
+        <h3 class="card-title">📅 Full Weekly Schedule</h3>
+      </div>
+      <p style="font-size:13px;color:var(--text-muted);margin-bottom:16px;line-height:1.6;">
+        All times are in <strong>CAT (Central Africa Time, UTC+2)</strong>
+      </p>
+
+      <!-- Monday – Friday -->
+      <h4 style="font-size:12px;letter-spacing:2px;text-transform:uppercase;color:var(--zim-gold);margin-bottom:12px;">
+        Monday – Friday
+      </h4>
+      <div class="schedule-item">
+        <span class="sched-time">06:00</span>
+        <div class="sched-dot"></div>
+        <div class="sched-info"><div class="sched-show">Rise & Shine Zimbabwe</div><div class="sched-host">Tafadzwa Moyo</div></div>
+      </div>
+      <div class="schedule-item">
+        <span class="sched-time">09:00</span>
+        <div class="sched-dot current"></div>
+        <div class="sched-info"><div class="sched-show">Morning Rush</div><div class="sched-host">Chiedza Mutasa</div></div>
+      </div>
+      <div class="schedule-item">
+        <span class="sched-time">12:00</span>
+        <div class="sched-dot"></div>
+        <div class="sched-info"><div class="sched-show">Midday Vibes</div><div class="sched-host">DJ Harare</div></div>
+      </div>
+      <div class="schedule-item">
+        <span class="sched-time">15:00</span>
+        <div class="sched-dot"></div>
+        <div class="sched-info"><div class="sched-show">Street Talk</div><div class="sched-host">Tatenda Chirwa</div></div>
+      </div>
+      <div class="schedule-item">
+        <span class="sched-time">18:00</span>
+        <div class="sched-dot"></div>
+        <div class="sched-info"><div class="sched-show">Evening Drive</div><div class="sched-host">Rumbi Nkosi</div></div>
+      </div>
+      <div class="schedule-item">
+        <span class="sched-time">21:00</span>
+        <div class="sched-dot"></div>
+        <div class="sched-info"><div class="sched-show">Night Culture</div><div class="sched-host">Blessing Dube</div></div>
+      </div>
+      <div class="schedule-item">
+        <span class="sched-time">00:00</span>
+        <div class="sched-dot"></div>
+        <div class="sched-info"><div class="sched-show">Overnight Grooves</div><div class="sched-host">Auto-DJ</div></div>
+      </div>
+
+      <h4 style="font-size:12px;letter-spacing:2px;text-transform:uppercase;color:var(--zim-gold);margin:20px 0 12px;">
+        Saturday
+      </h4>
+      <div class="schedule-item">
+        <span class="sched-time">08:00</span>
+        <div class="sched-dot"></div>
+        <div class="sched-info"><div class="sched-show">Weekend Warmup</div><div class="sched-host">Various DJs</div></div>
+      </div>
+      <div class="schedule-item">
+        <span class="sched-time">14:00</span>
+        <div class="sched-dot"></div>
+        <div class="sched-info"><div class="sched-show">Afrobeats Saturday</div><div class="sched-host">DJ Revolution</div></div>
+      </div>
+      <div class="schedule-item">
+        <span class="sched-time">20:00</span>
+        <div class="sched-dot"></div>
+        <div class="sched-info"><div class="sched-show">Big Saturday Night</div><div class="sched-host">DJ Harare</div></div>
+      </div>
+
+      <h4 style="font-size:12px;letter-spacing:2px;text-transform:uppercase;color:var(--zim-gold);margin:20px 0 12px;">
+        Sunday
+      </h4>
+      <div class="schedule-item">
+        <span class="sched-time">09:00</span>
+        <div class="sched-dot"></div>
+        <div class="sched-info"><div class="sched-show">Sunday Gospel Hour</div><div class="sched-host">Pastor Voice</div></div>
+      </div>
+      <div class="schedule-item">
+        <span class="sched-time">13:00</span>
+        <div class="sched-dot"></div>
+        <div class="sched-info"><div class="sched-show">Sunday Smooth</div><div class="sched-host">Tatenda Chirwa</div></div>
+      </div>
+      <div class="schedule-item">
+        <span class="sched-time">18:00</span>
+        <div class="sched-dot"></div>
+        <div class="sched-info"><div class="sched-show">The Week Ahead</div><div class="sched-host">News Desk</div></div>
+      </div>
+    </div>
+  </div><!-- /section schedule -->
+
+  <!-- ── INSTALL SECTION ────────────────────────────────────────────────── -->
+  <div class="section" data-section="install">
+
+    <div class="install-card" role="region" aria-label="Install Instructions">
+      <div class="install-header">
+        <div class="install-icon" aria-hidden="true">📲</div>
+        <div class="install-header-text">
+          <h3>Add to Home Screen</h3>
+          <p>Listen like a native app — no App Store needed!</p>
+        </div>
+      </div>
+
+      <div class="install-tabs" role="tablist">
+        <button class="install-tab active" role="tab" data-tab="android" aria-selected="true">Android</button>
+        <button class="install-tab" role="tab" data-tab="ios" aria-selected="false">iPhone / iPad</button>
+        <button class="install-tab" role="tab" data-tab="desktop" aria-selected="false">Desktop</button>
+      </div>
+
+      <div class="install-steps">
+
+        <!-- Android Steps -->
+        <div class="install-step active" data-step="android" role="tabpanel">
+          <button class="install-prompt-btn hidden" id="installPromptBtn" type="button">
+            ✨ Install Radio Revolution Now
+          </button>
+          <div class="step-item">
+            <div class="step-num">1</div>
+            <div class="step-text">Open this page in <strong>Google Chrome</strong> or any Chromium browser</div>
+          </div>
+          <div class="step-item">
+            <div class="step-num">2</div>
+            <div class="step-text">Tap the <strong>⋮ menu</strong> (three dots) in the top-right corner</div>
+          </div>
+          <div class="step-item">
+            <div class="step-num">3</div>
+            <div class="step-text">Select <strong>"Add to Home screen"</strong> or <strong>"Install app"</strong></div>
+          </div>
+          <div class="step-item">
+            <div class="step-num">4</div>
+            <div class="step-text">Tap <strong>"Add"</strong> — Radio Revolution will appear on your home screen like a native app! 🎉</div>
+          </div>
+        </div>
+
+        <!-- iOS Steps -->
+        <div class="install-step" data-step="ios" role="tabpanel">
+          <div class="step-item">
+            <div class="step-num">1</div>
+            <div class="step-text">Open this page in <strong>Safari</strong> (must be Safari for PWA install on iOS)</div>
+          </div>
+          <div class="step-item">
+            <div class="step-num">2</div>
+            <div class="step-text">Tap the <strong>Share button</strong> <span style="font-size:16px;">⎋</span> at the bottom of the screen</div>
+          </div>
+          <div class="step-item">
+            <div class="step-num">3</div>
+            <div class="step-text">Scroll down and tap <strong>"Add to Home Screen"</strong></div>
+          </div>
+          <div class="step-item">
+            <div class="step-num">4</div>
+            <div class="step-text">Tap <strong>"Add"</strong> — done! Find Radio Revolution on your home screen 📻</div>
+          </div>
+          <div class="step-item">
+            <div class="step-num">💡</div>
+            <div class="step-text" style="color:var(--zim-gold);">On iOS, background audio continues playing even after closing the app.</div>
+          </div>
+        </div>
+
+        <!-- Desktop Steps -->
+        <div class="install-step" data-step="desktop" role="tabpanel">
+          <div class="step-item">
+            <div class="step-num">1</div>
+            <div class="step-text">Open this page in <strong>Google Chrome</strong> or <strong>Microsoft Edge</strong></div>
+          </div>
+          <div class="step-item">
+            <div class="step-num">2</div>
+            <div class="step-text">Look for the <strong>install icon ⊕</strong> in the address bar (right side)</div>
+          </div>
+          <div class="step-item">
+            <div class="step-num">3</div>
+            <div class="step-text">Click it and select <strong>"Install"</strong></div>
+          </div>
+          <div class="step-item">
+            <div class="step-num">4</div>
+            <div class="step-text">Radio Revolution opens as its own window — pin it to your taskbar for quick access!</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Why install? -->
+    <div class="card">
+      <div class="card-header">
+        <h3 class="card-title">⚡ Why Install the App?</h3>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:12px;">
+        <div style="display:flex;gap:12px;align-items:flex-start;">
+          <span style="font-size:20px;">🔔</span>
+          <div>
+            <div style="font-size:13px;font-weight:700;">Push Notifications</div>
+            <div style="font-size:12px;color:var(--text-muted);">Get alerted the moment your favourite host goes live</div>
+          </div>
+        </div>
+        <div style="display:flex;gap:12px;align-items:flex-start;">
+          <span style="font-size:20px;">📴</span>
+          <div>
+            <div style="font-size:13px;font-weight:700;">Works Offline</div>
+            <div style="font-size:12px;color:var(--text-muted);">Browse the schedule even without internet</div>
+          </div>
+        </div>
+        <div style="display:flex;gap:12px;align-items:flex-start;">
+          <span style="font-size:20px;">🔒</span>
+          <div>
+            <div style="font-size:13px;font-weight:700;">Lock Screen Controls</div>
+            <div style="font-size:12px;color:var(--text-muted);">Play, pause and control from your lock screen</div>
+          </div>
+        </div>
+        <div style="display:flex;gap:12px;align-items:flex-start;">
+          <span style="font-size:20px;">⚡</span>
+          <div>
+            <div style="font-size:13px;font-weight:700;">Instant Load</div>
+            <div style="font-size:12px;color:var(--text-muted);">Opens instantly, no browser needed</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /section install -->
+
+  <!-- ── ABOUT SECTION ──────────────────────────────────────────────────── -->
+  <div class="section" data-section="about">
+
+    <div class="card" style="text-align:center;">
+      <img src="/icons/logo.svg" alt="Radio Revolution Logo"
+           style="width:140px;height:140px;margin:0 auto 16px;display:block;"
+           onerror="this.style.display='none'">
+      <h2 style="font-size:22px;font-weight:900;margin-bottom:4px;">Radio Revolution</h2>
+      <p style="color:var(--zim-gold);font-size:13px;font-weight:600;letter-spacing:2px;text-transform:uppercase;margin-bottom:20px;">
+        The Unfiltered Voice of Zimbabwe
+      </p>
+      <p class="about-text">
+        <strong>Radio Revolution</strong> is Zimbabwe's boldest independent radio station.
+        We speak truth, play the best music, and give a platform to every Zimbabwean voice —
+        <span class="zim-accent">unfiltered, unapologetic, unstoppable.</span>
+      </p>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <h3 class="card-title">📞 Get in Touch</h3>
+      </div>
+      <p class="about-text" style="margin-bottom:16px;">
+        Request a song, share your story, or advertise with us.
+        We want to hear from <strong>you</strong>.
+      </p>
+      <div class="social-row">
+        <a class="social-btn" href="tel:+263000000000">📞 Call Us</a>
+        <a class="social-btn" href="https://wa.me/263000000000" target="_blank" rel="noopener">💬 WhatsApp</a>
+        <a class="social-btn" href="mailto:hello@radiorevolution.co.zw">✉️ Email</a>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <h3 class="card-title">🌐 Follow Us</h3>
+      </div>
+      <div class="social-row">
+        <a class="social-btn" href="https://facebook.com/radiorevolutionzw" target="_blank" rel="noopener">📘 Facebook</a>
+        <a class="social-btn" href="https://twitter.com/radiorevzw" target="_blank" rel="noopener">🐦 X / Twitter</a>
+        <a class="social-btn" href="https://instagram.com/radiorevolutionzw" target="_blank" rel="noopener">📸 Instagram</a>
+        <a class="social-btn" href="https://tiktok.com/@radiorevolutionzw" target="_blank" rel="noopener">🎵 TikTok</a>
+      </div>
+    </div>
+
+    <div class="card" style="text-align:center;">
+      <p style="font-size:11px;color:var(--text-muted);line-height:1.8;">
+        &copy; 2024 Radio Revolution Zimbabwe · All rights reserved<br>
+        Broadcasting from <span class="zim-accent">Harare, Zimbabwe</span> 🇿🇼<br>
+        <a href="/admin.html" style="color:var(--text-muted);text-decoration:none;">Host Portal</a>
+      </p>
+    </div>
+
+  </div><!-- /section about -->
+
+</main>
+
+<!-- ─── Bottom Navigation ─────────────────────────────────────────────────── -->
+<nav class="bottom-nav" role="navigation" aria-label="Main navigation">
+  <button class="nav-item active" data-nav="home" aria-label="Home" type="button">
+    <span class="nav-icon" aria-hidden="true">📻</span>
+    <span class="nav-label">Listen</span>
+  </button>
+  <button class="nav-item" data-nav="schedule" aria-label="Schedule" type="button">
+    <span class="nav-icon" aria-hidden="true">📅</span>
+    <span class="nav-label">Schedule</span>
+  </button>
+  <button class="nav-item" data-nav="install" aria-label="Install App" type="button">
+    <span class="nav-icon" aria-hidden="true">📲</span>
+    <span class="nav-label">Install</span>
+  </button>
+  <button class="nav-item" data-nav="about" aria-label="About" type="button">
+    <span class="nav-icon" aria-hidden="true">ℹ️</span>
+    <span class="nav-label">About</span>
+  </button>
+</nav>
+
+<!-- Toast Notification -->
+<div class="toast" id="toast" role="alert" aria-live="assertive"></div>
+
+<script src="/js/app.js"></script>
+<script>
+  // ─── Share Button ─────────────────────────────────────────────────────────
+  document.getElementById('shareBtn').addEventListener('click', async () => {
+    const shareData = {
+      title: 'Radio Revolution Zimbabwe',
+      text: '🎙️ Listen to The Unfiltered Voice of Zimbabwe — Radio Revolution!',
+      url: window.location.href,
+    };
+    if (navigator.share) {
+      try {
+        await navigator.share(shareData);
+      } catch {}
+    } else {
+      await navigator.clipboard.writeText(window.location.href).catch(() => {});
+      document.getElementById('toast').textContent = '🔗 Link copied to clipboard!';
+      document.getElementById('toast').className = 'toast info show';
+      setTimeout(() => document.getElementById('toast').classList.remove('show'), 3000);
+    }
+  });
+</script>
+</body>
+</html>
