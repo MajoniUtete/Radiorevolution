@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex, nofollow" />
+  <meta name="theme-color" content="#cc0000" />
+  <title>Host Portal — Radio Revolution</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --red: #cc0000; --gold: #FFD200; --green: #006400;
+      --bg: #080b10; --card: rgba(255,255,255,0.04);
+      --border: rgba(255,255,255,0.08); --text: #f0f0f0; --muted: #888;
+    }
+    body {
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      background: var(--bg); color: var(--text);
+      min-height: 100vh; padding: 20px;
+    }
+    .flag-bar {
+      display: flex; height: 4px; margin-bottom: 24px;
+      border-radius: 2px; overflow: hidden;
+    }
+    .flag-bar span { flex: 1; }
+    .f1 { background: #006400; }
+    .f2 { background: #FFD200; }
+    .f3 { background: #CC0000; }
+    .f4 { background: #000; }
+
+    .page { max-width: 560px; margin: 0 auto; display: flex; flex-direction: column; gap: 20px; }
+
+    .header { display: flex; align-items: center; gap: 12px; margin-bottom: 4px; }
+    .header-logo {
+      width: 48px; height: 48px; background: var(--red);
+      border-radius: 12px; display: flex; align-items: center;
+      justify-content: center; font-size: 24px;
+      box-shadow: 0 4px 20px rgba(204,0,0,0.4);
+    }
+    h1 { font-size: 20px; font-weight: 800; }
+    .subtitle { font-size: 12px; color: var(--muted); margin-top: 2px; }
+
+    .card {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: 20px; padding: 20px; backdrop-filter: blur(10px);
+      position: relative; overflow: hidden;
+    }
+    .card::before {
+      content: ''; position: absolute; top: -1px; left: 0; right: 0; height: 2px;
+      background: linear-gradient(90deg, var(--green), var(--gold), var(--red));
+    }
+    .card h2 {
+      font-size: 15px; font-weight: 700; margin-bottom: 4px;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .card p { font-size: 12px; color: var(--muted); line-height: 1.6; margin-bottom: 16px; }
+
+    .login-form { display: flex; flex-direction: column; gap: 12px; }
+    input[type="password"], input[type="text"], textarea {
+      width: 100%; padding: 12px 16px; border-radius: 10px;
+      border: 1px solid var(--border); background: rgba(255,255,255,0.05);
+      color: var(--text); font-size: 14px; outline: none;
+      transition: border-color 0.2s;
+    }
+    input:focus, textarea:focus { border-color: var(--red); }
+    textarea { min-height: 80px; resize: vertical; font-family: inherit; }
+
+    .btn {
+      padding: 14px 20px; border: none; border-radius: 12px;
+      font-size: 14px; font-weight: 700; cursor: pointer;
+      transition: all 0.2s; width: 100%; letter-spacing: 0.5px;
+    }
+    .btn-red {
+      background: linear-gradient(135deg, var(--red), #ff3333);
+      color: #fff; box-shadow: 0 4px 20px rgba(204,0,0,0.4);
+    }
+    .btn-red:hover { transform: translateY(-1px); box-shadow: 0 8px 30px rgba(204,0,0,0.5); }
+    .btn-red:active { transform: translateY(0); }
+    .btn-green {
+      background: linear-gradient(135deg, var(--green), #009a00);
+      color: #fff; box-shadow: 0 4px 20px rgba(0,100,0,0.4);
+    }
+    .btn-gold {
+      background: linear-gradient(135deg, #b8960c, var(--gold));
+      color: #000; box-shadow: 0 4px 20px rgba(255,210,0,0.3);
+    }
+    .btn:disabled { opacity: 0.4; cursor: not-allowed; transform: none; box-shadow: none; }
+
+    .btn-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+
+    .status-light {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 8px 14px; border-radius: 50px; font-size: 13px; font-weight: 700;
+    }
+    .status-light.off { background: rgba(255,255,255,0.05); color: var(--muted); }
+    .status-light.live { background: rgba(204,0,0,0.15); color: var(--red); border: 1px solid rgba(204,0,0,0.3); }
+    .status-dot { width: 8px; height: 8px; border-radius: 50%; background: currentColor; }
+    .status-light.live .status-dot { animation: pulse 1.5s infinite; }
+    @keyframes pulse { 0%,100%{transform:scale(1);} 50%{transform:scale(1.4);} }
+
+    .hidden { display: none !important; }
+
+    #loginSection {}
+    #mainPanel { display: none; }
+
+    .log-area {
+      background: rgba(0,0,0,0.4); border-radius: 10px;
+      padding: 12px; font-size: 12px; font-family: monospace;
+      color: #aaa; max-height: 200px; overflow-y: auto;
+      border: 1px solid var(--border); line-height: 1.7;
+    }
+    .log-entry { display: flex; gap: 8px; }
+    .log-time { color: var(--gold); flex-shrink: 0; }
+    .log-msg.ok  { color: #4caf50; }
+    .log-msg.err { color: var(--red); }
+    .log-msg.info{ color: #aaa; }
+
+    .info-box {
+      background: rgba(255,210,0,0.06); border: 1px solid rgba(255,210,0,0.2);
+      border-radius: 12px; padding: 14px; font-size: 12px; color: var(--muted);
+      line-height: 1.7;
+    }
+    .info-box strong { color: var(--gold); }
+    .info-box code {
+      background: rgba(255,255,255,0.08); padding: 1px 6px;
+      border-radius: 4px; font-family: monospace; color: var(--text);
+    }
+
+    .divider {
+      height: 1px; background: var(--border); margin: 12px 0;
+    }
+
+    .back-link {
+      display: inline-flex; align-items: center; gap: 6px;
+      color: var(--muted); text-decoration: none; font-size: 13px;
+      transition: color 0.2s;
+    }
+    .back-link:hover { color: var(--text); }
+
+    .tag {
+      display: inline-block; padding: 2px 8px; border-radius: 20px;
+      font-size: 10px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase;
+    }
+    .tag-red { background: rgba(204,0,0,0.15); color: var(--red); border: 1px solid rgba(204,0,0,0.3); }
+    .tag-green { background: rgba(0,100,0,0.15); color: #4caf50; border: 1px solid rgba(0,100,0,0.3); }
+
+    @media (max-width: 400px) { .btn-row { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+
+<div class="page">
+
+  <div class="flag-bar">
+    <span class="f1"></span><span class="f2"></span><span class="f3"></span>
+    <span class="f4"></span><span class="f3"></span><span class="f2"></span>
+    <span class="f1"></span>
+  </div>
+
+  <div class="header">
+    <div class="header-logo">🎙️</div>
+    <div>
+      <h1>Host Portal</h1>
+      <p class="subtitle">Radio Revolution — Broadcast Control</p>
+    </div>
+  </div>
+
+  <!-- ─── Login ────────────────────────────────────────────────────────────── -->
+  <div class="card" id="loginSection">
+    <h2>🔐 Host Login</h2>
+    <p>Enter your host password to access the broadcast panel.</p>
+    <div class="login-form">
+      <input type="password" id="hostPassword" placeholder="Host password..." autocomplete="current-password" />
+      <button class="btn btn-red" id="loginBtn" type="button">Sign In →</button>
+    </div>
+    <div id="loginError" style="color:var(--red);font-size:12px;margin-top:8px;display:none;">
+      Incorrect password. Please try again.
+    </div>
+  </div>
+
+  <!-- ─── Main Panel (shown after login) ──────────────────────────────────── -->
+  <div id="mainPanel">
+
+    <!-- Live Controls -->
+    <div class="card">
+      <h2>📡 Broadcast Status</h2>
+      <p>Manage your live stream and notify your listeners instantly.</p>
+
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
+        <div class="status-light off" id="broadcastStatus">
+          <div class="status-dot"></div>
+          <span id="statusText">Offline</span>
+        </div>
+        <span class="tag tag-red hidden" id="liveTag">ON AIR</span>
+      </div>
+
+      <div class="btn-row">
+        <button class="btn btn-green" id="goLiveBtn" type="button">
+          🔴 Go Live
+        </button>
+        <button class="btn btn-red" id="endLiveBtn" type="button" disabled>
+          ⏹️ End Broadcast
+        </button>
+      </div>
+    </div>
+
+    <!-- Push Notification Sender -->
+    <div class="card">
+      <h2>🔔 Send Notification</h2>
+      <p>Push a custom message to all subscribed listeners. Use this to announce shows, breaking news, or special guests.</p>
+
+      <div style="display:flex;flex-direction:column;gap:10px;">
+        <input type="text" id="notifTitle" placeholder="Notification title..."
+               value="Radio Revolution is LIVE! 🔴" maxlength="80" />
+        <textarea id="notifBody" placeholder="Message to your listeners..."
+                  maxlength="200">🎙️ The unfiltered voice of Zimbabwe is on air now. Tap to listen!</textarea>
+        <button class="btn btn-red" id="sendNotifBtn" type="button">
+          📣 Push to All Listeners
+        </button>
+      </div>
+    </div>
+
+    <!-- Quick Announce Buttons -->
+    <div class="card">
+      <h2>⚡ Quick Announce</h2>
+      <p>One-tap announcements for common events.</p>
+      <div style="display:flex;flex-direction:column;gap:8px;">
+        <button class="btn btn-red" onclick="quickAnnounce('on-air')" type="button">
+          🔴 We're LIVE — Tune in now!
+        </button>
+        <button class="btn btn-gold" onclick="quickAnnounce('song')" type="button">
+          🎵 Now Playing a Hot Track!
+        </button>
+        <button class="btn btn-green" onclick="quickAnnounce('guest')" type="button">
+          ⭐ Special Guest on Air!
+        </button>
+        <button class="btn" style="background:rgba(255,255,255,0.08);color:var(--text);"
+                onclick="quickAnnounce('news')" type="button">
+          📰 Breaking News — Listen In!
+        </button>
+      </div>
+    </div>
+
+    <!-- BUTT Setup Instructions -->
+    <div class="card">
+      <h2>🖥️ BUTT Setup</h2>
+      <p>Configure BUTT (Broadcast Using This Tool) to auto-notify listeners when you start streaming.</p>
+
+      <div class="info-box" style="margin-bottom:14px;">
+        <strong>How BUTT ➡️ Notifications works:</strong><br><br>
+        1. Open BUTT → <strong>Settings → Events</strong><br>
+        2. Under <strong>"On Connect"</strong>, set your script path:<br>
+        <code>notify-live.sh</code> (see below)<br><br>
+        3. Every time you hit <strong>Play</strong> in BUTT, the script fires a webhook to your server, which sends push notifications to all listeners automatically.
+      </div>
+
+      <div class="info-box">
+        <strong>notify-live.sh</strong><br>
+        <code style="display:block;margin-top:8px;padding:10px;background:rgba(0,0,0,0.4);border-radius:6px;white-space:pre;overflow-x:auto;">#!/bin/bash
+# BUTT on-connect webhook script
+# Place this file where BUTT can find it
+
+API_URL="https://your-api.radiorevolution.co.zw"
+HOST_KEY="your-secret-host-key"
+
+curl -s -X POST "$API_URL/broadcast/live" \
+  -H "Content-Type: application/json" \
+  -H "X-Host-Key: $HOST_KEY" \
+  -d '{"status":"live","host":"'$BUTT_STREAM_NAME'"}' \
+  &gt; /dev/null 2&gt;&amp;1
+
+exit 0</code>
+        <br>Make executable: <code>chmod +x notify-live.sh</code>
+      </div>
+    </div>
+
+    <!-- Activity Log -->
+    <div class="card">
+      <h2>📋 Activity Log</h2>
+      <div class="log-area" id="logArea">
+        <div class="log-entry">
+          <span class="log-time">--:--:--</span>
+          <span class="log-msg info">Host portal loaded. Ready to broadcast.</span>
+        </div>
+      </div>
+    </div>
+
+    <div style="display:flex;justify-content:space-between;align-items:center;padding:0 4px;">
+      <a href="/" class="back-link">← Back to Radio</a>
+      <button class="btn" style="width:auto;padding:8px 16px;background:rgba(255,255,255,0.05);
+              color:var(--muted);font-size:12px;" onclick="doLogout()" type="button">
+        Sign Out
+      </button>
+    </div>
+
+  </div><!-- /mainPanel -->
+
+</div><!-- /page -->
+
+<script>
+  // ─── Config ────────────────────────────────────────────────────────────────
+  const API_URL = ''; // e.g. 'https://your-api.radiorevolution.co.zw'
+
+  // Default password (change in server config for production!)
+  // This is a client-side check only — use server auth for security.
+  const HOST_PASSWORD = localStorage.getItem('rr_host_pass') || 'revolution2024';
+
+  let isLive = false;
+
+  // ─── Login ─────────────────────────────────────────────────────────────────
+  document.getElementById('loginBtn').addEventListener('click', doLogin);
+  document.getElementById('hostPassword').addEventListener('keydown', e => {
+    if (e.key === 'Enter') doLogin();
+  });
+
+  function doLogin() {
+    const pw = document.getElementById('hostPassword').value;
+    if (pw === HOST_PASSWORD) {
+      document.getElementById('loginSection').style.display = 'none';
+      document.getElementById('mainPanel').style.display = 'flex';
+      document.getElementById('mainPanel').style.flexDirection = 'column';
+      document.getElementById('mainPanel').style.gap = '20px';
+      logEntry('Login successful. Welcome, host!', 'ok');
+    } else {
+      document.getElementById('loginError').style.display = 'block';
+      document.getElementById('hostPassword').value = '';
+      document.getElementById('hostPassword').focus();
+    }
+  }
+
+  function doLogout() {
+    document.getElementById('loginSection').style.display = 'block';
+    document.getElementById('mainPanel').style.display = 'none';
+    document.getElementById('hostPassword').value = '';
+  }
+
+  // ─── Broadcast Controls ────────────────────────────────────────────────────
+  document.getElementById('goLiveBtn').addEventListener('click', goLive);
+  document.getElementById('endLiveBtn').addEventListener('click', endLive);
+
+  async function goLive() {
+    setLiveState(true);
+    logEntry('Going LIVE...', 'info');
+
+    // Send notification automatically when going live
+    await sendNotification(
+      'Radio Revolution is LIVE! 🔴',
+      '🎙️ The unfiltered voice of Zimbabwe is on air now. Tap to listen!'
+    );
+
+    if (API_URL) {
+      try {
+        await fetch(`${API_URL}/broadcast/live`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ status: 'live', timestamp: new Date().toISOString() })
+        });
+        logEntry('Server notified — broadcast marked as LIVE', 'ok');
+      } catch {
+        logEntry('Could not reach push server (running offline?)', 'err');
+      }
+    }
+  }
+
+  async function endLive() {
+    setLiveState(false);
+    logEntry('Broadcast ended.', 'info');
+
+    if (API_URL) {
+      try {
+        await fetch(`${API_URL}/broadcast/offline`, { method: 'POST' });
+      } catch {}
+    }
+  }
+
+  function setLiveState(live) {
+    isLive = live;
+    const status  = document.getElementById('broadcastStatus');
+    const liveTag = document.getElementById('liveTag');
+    const goBtn   = document.getElementById('goLiveBtn');
+    const endBtn  = document.getElementById('endLiveBtn');
+
+    status.className = `status-light ${live ? 'live' : 'off'}`;
+    document.getElementById('statusText').textContent = live ? 'LIVE' : 'Offline';
+    liveTag.classList.toggle('hidden', !live);
+    goBtn.disabled  = live;
+    endBtn.disabled = !live;
+  }
+
+  // ─── Send Notification ─────────────────────────────────────────────────────
+  document.getElementById('sendNotifBtn').addEventListener('click', async () => {
+    const title = document.getElementById('notifTitle').value.trim();
+    const body  = document.getElementById('notifBody').value.trim();
+    if (!title || !body) { logEntry('Title and message are required.', 'err'); return; }
+    await sendNotification(title, body);
+  });
+
+  async function sendNotification(title, body) {
+    logEntry(`Sending: "${title}"`, 'info');
+
+    // Show local notification (works without server for testing)
+    if ('Notification' in window && Notification.permission === 'granted') {
+      new Notification(title, {
+        body, icon: '/icons/icon-192.png', badge: '/icons/icon-96.png',
+        tag: 'radio-live', renotify: true,
+        vibrate: [200, 100, 200]
+      });
+      logEntry('Local notification sent.', 'ok');
+    } else if ('Notification' in window && Notification.permission !== 'denied') {
+      const perm = await Notification.requestPermission();
+      if (perm === 'granted') {
+        new Notification(title, { body, icon: '/icons/icon-192.png' });
+      }
+    }
+
+    // Send to push server (for actual subscribers)
+    if (API_URL) {
+      try {
+        const res = await fetch(`${API_URL}/notify`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ title, body, icon: '/icons/icon-192.png' })
+        });
+        const data = await res.json();
+        logEntry(`Push sent to ${data.sent || '?'} subscribers.`, 'ok');
+      } catch (e) {
+        logEntry('Push server unreachable — check server setup.', 'err');
+      }
+    } else {
+      logEntry('No API_URL set — only local notifications sent.', 'info');
+    }
+  }
+
+  // ─── Quick Announce ────────────────────────────────────────────────────────
+  const quickMessages = {
+    'on-air': {
+      title: 'Radio Revolution is LIVE! 🔴',
+      body: '🎙️ The unfiltered voice of Zimbabwe is on air now. Tap to listen!'
+    },
+    'song': {
+      title: '🎵 Hot Track Playing Now!',
+      body: 'Tune in to Radio Revolution right now — this one\'s a banger!'
+    },
+    'guest': {
+      title: '⭐ Special Guest on Air!',
+      body: 'An incredible guest is live on Radio Revolution right now. Don\'t miss it!'
+    },
+    'news': {
+      title: '📰 Breaking: News Alert',
+      body: 'Radio Revolution is covering breaking news live. Tune in now!'
+    }
+  };
+
+  function quickAnnounce(type) {
+    const msg = quickMessages[type];
+    if (!msg) return;
+    document.getElementById('notifTitle').value = msg.title;
+    document.getElementById('notifBody').value  = msg.body;
+    sendNotification(msg.title, msg.body);
+  }
+
+  // ─── Log Helper ────────────────────────────────────────────────────────────
+  function logEntry(msg, type = 'info') {
+    const now = new Date().toLocaleTimeString('en-GB', { hour12: false });
+    const area = document.getElementById('logArea');
+    const div  = document.createElement('div');
+    div.className = 'log-entry';
+    div.innerHTML = `<span class="log-time">${now}</span><span class="log-msg ${type}">${msg}</span>`;
+    area.appendChild(div);
+    area.scrollTop = area.scrollHeight;
+  }
+</script>
+</body>
+</html>

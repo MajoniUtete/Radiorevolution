@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#cc0000" />
+  <title>Offline — Radio Revolution</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      background: #080b10; color: #f0f0f0;
+      min-height: 100vh; display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      text-align: center; padding: 24px;
+    }
+    .flag-bar {
+      position: fixed; top: 0; left: 0; right: 0;
+      display: flex; height: 4px;
+    }
+    .flag-bar span { flex: 1; }
+    .logo { font-size: 64px; margin-bottom: 20px; animation: float 3s ease-in-out infinite; }
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50%       { transform: translateY(-8px); }
+    }
+    h1 { font-size: 24px; font-weight: 900; margin-bottom: 8px; }
+    p  { font-size: 14px; color: #888; line-height: 1.6; max-width: 280px; margin-bottom: 28px; }
+    .btn {
+      padding: 14px 32px; background: linear-gradient(135deg, #cc0000, #ff3333);
+      color: #fff; border: none; border-radius: 50px; font-size: 14px;
+      font-weight: 700; cursor: pointer; box-shadow: 0 4px 20px rgba(204,0,0,0.4);
+      transition: transform 0.2s;
+    }
+    .btn:hover { transform: scale(1.03); }
+    .wave { display: flex; gap: 5px; justify-content: center; margin-top: 32px; }
+    .wave span {
+      width: 4px; border-radius: 4px;
+      background: linear-gradient(to top, #006400, #FFD200, #CC0000);
+      animation: waveOff 1.5s ease-in-out infinite;
+      opacity: 0.4;
+    }
+    .wave span:nth-child(1) { height: 12px; animation-delay: 0s; }
+    .wave span:nth-child(2) { height: 20px; animation-delay: 0.15s; }
+    .wave span:nth-child(3) { height: 30px; animation-delay: 0.3s; }
+    .wave span:nth-child(4) { height: 20px; animation-delay: 0.45s; }
+    .wave span:nth-child(5) { height: 12px; animation-delay: 0.6s; }
+    @keyframes waveOff {
+      0%, 100% { transform: scaleY(0.3); }
+      50%       { transform: scaleY(1); }
+    }
+  </style>
+</head>
+<body>
+  <div class="flag-bar">
+    <span style="background:#006400"></span>
+    <span style="background:#FFD200"></span>
+    <span style="background:#CC0000"></span>
+    <span style="background:#000"></span>
+    <span style="background:#CC0000"></span>
+    <span style="background:#FFD200"></span>
+    <span style="background:#006400"></span>
+  </div>
+
+  <div class="logo">📻</div>
+  <h1>You're Offline</h1>
+  <p>No internet connection right now. Check your connection and try again — Radio Revolution will be here when you're back!</p>
+  <button class="btn" onclick="window.location.reload()">Try Again</button>
+
+  <div class="wave" aria-hidden="true">
+    <span></span><span></span><span></span><span></span><span></span>
+  </div>
+</body>
+</html>
